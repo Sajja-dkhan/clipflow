@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My Clips</h1>
+{% for video in videos %}
+  <section class="card">
+    <h2>{{ video.title }} ({{ video.video_id }})</h2>
+    <div class="clips-grid">
+      {% for clip in video.clips %}
+        {% if not clip.deleted %}
+        <div class="clip-card">
+          <p>Clip #{{ clip.clip_number }}</p>
+          <p>{{ clip.duration }}s</p>
+          {% if clip.final_path %}
+          {% set final_file = clip.final_path.replace('data/clips_with_captions/', '') %}
+          <a href="/data/clips_with_captions/{{ final_file }}" target="_blank">Preview</a>
+          <a href="/data/clips_with_captions/{{ final_file }}" download>Download</a>
+          <button class="delete-clip-btn" data-path="{{ clip.final_path }}">Delete</button>
+          {% else %}
+          <span>Caption status: {{ clip.caption_status }}</span>
+          {% endif %}
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+{% else %}
+  <p>No clips available.</p>
+{% endfor %}
+{% endblock %}

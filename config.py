@@ -1,0 +1,14 @@
+DOWNLOAD_DIR = "data/downloads"
+CLIPS_DIR = "data/clips"
+FINAL_CLIPS_DIR = "data/clips_with_captions"
+DB_PATH = "data/db.json"
+MAX_CLIP_DURATION = 60
+MIN_CLIP_DURATION = 10
+SCHEDULE_HOUR = 9
+SCHEDULE_MINUTE = 0
+WHISPER_MODEL = "base"
+CAPTION_FONT = "Arial"
+CAPTION_FONT_SIZE = 24
+CAPTION_COLOR = "white"
+CAPTION_BG_COLOR = "black@0.5"
+CAPTION_POSITION = "bottom"

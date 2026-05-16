@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  background: #0f0f0f;
+  color: #f4f4f4;
+  font-family: "Consolas", "Fira Mono", monospace;
+}
+
+.navbar {
+  background: #191919;
+  padding: 12px 20px;
+  display: flex;
+  gap: 14px;
+  border-bottom: 1px solid #222;
+}
+
+.navbar a {
+  color: #ff4444;
+  text-decoration: none;
+}
+
+.container {
+  padding: 20px;
+}
+
+.card {
+  background: #161616;
+  border: 1px solid #242424;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+input, button, select {
+  width: 100%;
+  margin: 8px 0 12px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #111;
+  color: #fff;
+}
+
+button {
+  background: #ff4444;
+  border: none;
+  cursor: pointer;
+}
+
+.progress {
+  width: 100%;
+  height: 10px;
+  background: #282828;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#progress-bar {
+  height: 10px;
+  background: #ff4444;
+}
+
+.clips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.clip-card {
+  border: 1px solid #2d2d2d;
+  border-radius: 6px;
+  padding: 10px;
+}

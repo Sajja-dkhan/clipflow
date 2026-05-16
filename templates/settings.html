@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Settings</h1>
+<form id="settings-form" class="card">
+  <label>Caption Font Size (16-48)</label>
+  <input type="range" min="16" max="48" name="caption_font_size" value="{{ settings.caption_font_size or 24 }}">
+
+  <label>Caption Position</label>
+  <div>
+    <label><input type="radio" name="caption_position" value="top" {% if (settings.caption_position or 'bottom') == 'top' %}checked{% endif %}> Top</label>
+    <label><input type="radio" name="caption_position" value="bottom" {% if (settings.caption_position or 'bottom') == 'bottom' %}checked{% endif %}> Bottom</label>
+  </div>
+
+  <label>Caption Color</label>
+  <input type="color" name="caption_color" value="#ffffff">
+
+  <label>Caption Background</label>
+  <select name="caption_background">
+    <option value="transparent">Transparent</option>
+    <option value="black@0.5" selected>Semi-black</option>
+  </select>
+
+  <label>Whisper Model</label>
+  <select name="whisper_model">
+    <option value="tiny">tiny=fastest</option>
+    <option value="base" selected>base=recommended</option>
+    <option value="small">small=better</option>
+    <option value="medium">medium=best</option>
+  </select>
+
+  <label>Daily Check Time</label>
+  <input type="time" name="schedule_time" value="{{ settings.schedule_time or '09:00' }}">
+
+  <button type="submit">Save Settings</button>
+</form>
+{% endblock %}

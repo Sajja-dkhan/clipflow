@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>ClipFlow Dashboard</h1>
+<section class="card">
+  <h2>Channel</h2>
+  <p><strong>Name:</strong> {{ channel.name or "Not configured" }}</p>
+  <p><strong>Last check:</strong> <span id="last-check">{{ last_check or "Never" }}</span></p>
+</section>
+
+<section class="card">
+  <h2>Status</h2>
+  <p id="status-text">Idle</p>
+  <div class="progress"><div id="progress-bar" style="width:0%"></div></div>
+  <button id="check-now-btn" type="button">Check Now</button>
+</section>
+
+<section class="card">
+  <h2>Latest Video</h2>
+  {% if latest_video %}
+    <p><strong>{{ latest_video.title }}</strong></p>
+    <p>{{ latest_video.clips|length }} clips extracted</p>
+  {% else %}
+    <p>No videos processed yet.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Disk Usage (MB)</h2>
+  <p>Downloads: {{ disk_usage.downloads_size_mb }}</p>
+  <p>Clips: {{ disk_usage.clips_size_mb }}</p>
+  <p>Final: {{ disk_usage.final_clips_size_mb }}</p>
+  <p>Total: {{ disk_usage.total_size_mb }}</p>
+</section>
+{% endblock %}

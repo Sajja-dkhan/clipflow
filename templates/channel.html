@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Channel Setup</h1>
+<form id="channel-form" class="card">
+  <label>YouTube Channel URL</label>
+  <input type="text" name="channel_url" placeholder="https://www.youtube.com/@channel" required>
+
+  <label>YouTube API Key (optional)</label>
+  <input type="text" name="api_key" placeholder="Leave empty to use free scraping">
+
+  <button type="submit">Save & Verify Channel</button>
+</form>
+<div id="channel-result" class="card"></div>
+{% endblock %}
