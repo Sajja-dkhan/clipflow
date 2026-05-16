@@ -66,10 +66,26 @@ def user_delete_clip(clip_path: str) -> bool:
     try:
         if not clip_path:
             return False
-        if os.path.exists(clip_path):
-            os.remove(clip_path)
-
         db = load_db()
+        matched_path = ""
+        for video in db.get("videos", []):
+            for clip in video.get("clips", []):
+                if clip.get("final_path") == clip_path:
+                    matched_path = clip.get("final_path", "")
+                    break
+            if matched_path:
+                break
+
+        if not matched_path:
+            return False
+
+        requested_path = os.path.abspath(matched_path)
+        allowed_root = os.path.abspath(FINAL_CLIPS_DIR)
+        if os.path.commonpath([requested_path, allowed_root]) != allowed_root:
+            return False
+        if os.path.exists(requested_path):
+            os.remove(requested_path)
+
         for video in db.get("videos", []):
             for clip in video.get("clips", []):
                 if clip.get("final_path") == clip_path or clip.get("clip_path") == clip_path:

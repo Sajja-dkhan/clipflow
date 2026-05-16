@@ -1,7 +1,13 @@
 async function pollStatus() {
   try {
     const res = await fetch('/api/status');
-    if (!res.ok) return;
+    if (!res.ok) {
+      const statusText = document.getElementById('status-text');
+      if (statusText) {
+        statusText.textContent = 'status unavailable';
+      }
+      return;
+    }
     const data = await res.json();
     const statusText = document.getElementById('status-text');
     const progressBar = document.getElementById('progress-bar');
@@ -11,8 +17,8 @@ async function pollStatus() {
     if (progressBar) {
       progressBar.style.width = `${data.progress || 0}%`;
     }
-  } catch (_e) {
-    // no-op
+  } catch (e) {
+    console.error('Status polling failed', e);
   }
 }
 
@@ -22,8 +28,21 @@ pollStatus();
 const checkNowBtn = document.getElementById('check-now-btn');
 if (checkNowBtn) {
   checkNowBtn.addEventListener('click', async () => {
-    await fetch('/api/channel/check-now', { method: 'POST' });
-    pollStatus();
+    try {
+      const res = await fetch('/api/channel/check-now', { method: 'POST' });
+      const data = await res.json();
+      const statusText = document.getElementById('status-text');
+      if (statusText && !data.success) {
+        statusText.textContent = data.message || 'Failed to start check';
+      }
+      pollStatus();
+    } catch (e) {
+      const statusText = document.getElementById('status-text');
+      if (statusText) {
+        statusText.textContent = 'Failed to start check';
+      }
+      console.error('Check-now request failed', e);
+    }
   });
 }
 
@@ -60,7 +79,10 @@ if (settingsForm) {
       body: JSON.stringify(payload),
     });
     const data = await res.json();
-    alert(data.success ? 'Settings saved' : `Failed: ${data.message || 'Unknown error'}`);
+    const messageEl = document.getElementById('settings-message');
+    if (messageEl) {
+      messageEl.textContent = data.success ? 'Settings saved' : `Failed: ${data.message || 'Unknown error'}`;
+    }
   });
 }
 

@@ -21,6 +21,12 @@ def _load_model(model_name: str):
     return _MODEL_CACHE[model_name]
 
 
+def _escape_subtitle_path_for_ffmpeg(path: str) -> str:
+    normalized = os.path.abspath(path).replace("\\", "/")
+    escaped = normalized.replace(":", "\\:").replace("'", "\\'")
+    return escaped
+
+
 def generate_captions_for_clip(clip_path: str, output_dir: str, style_config: Dict) -> Optional[str]:
     try:
         os.makedirs(output_dir, exist_ok=True)
@@ -51,7 +57,7 @@ def burn_captions_into_clip(clip_path: str, srt_path: str, output_path: str, sty
         font = style_config.get("caption_font", "Arial")
         size = int(style_config.get("caption_font_size", 24))
 
-        subtitle_path = srt_path.replace("\\", "\\\\").replace(":", "\\:")
+        subtitle_path = _escape_subtitle_path_for_ffmpeg(srt_path)
         vf = (
             f"subtitles={subtitle_path}:"
             f"force_style='FontName={font},FontSize={size},PrimaryColour=&H00FFFFFF,BackColour=&H80000000,Alignment={alignment}'"

@@ -146,7 +146,8 @@ def extract_channel_id(channel_url: str, api_key: Optional[str] = None) -> Optio
         if len(path_parts) >= 2 and path_parts[0].lower() == "channel":
             return path_parts[1]
 
-        if "youtube.com" in parsed.netloc and parsed.path == "/watch":
+        normalized_netloc = parsed.netloc.lower()
+        if normalized_netloc in {"youtube.com", "www.youtube.com", "m.youtube.com"} and parsed.path == "/watch":
             query = parse_qs(parsed.query)
             if "v" in query:
                 return None

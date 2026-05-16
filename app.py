@@ -6,7 +6,7 @@ from flask import Flask, jsonify, render_template, request, send_from_directory
 from flask_cors import CORS
 
 import config
-from modules import ensure_db, load_db
+from modules import ensure_db, load_db, save_db
 from modules.storage_manager import get_disk_usage, user_delete_clip
 from scheduler import job_status, reschedule_daily_job, run_check_async, start_scheduler
 
@@ -60,8 +60,8 @@ def save_channel():
         }
         save_db(db)
         return jsonify({"success": True, "channel": db["channel"]})
-    except Exception as exc:
-        return jsonify({"success": False, "message": str(exc)}), 500
+    except Exception:
+        return jsonify({"success": False, "message": "Internal server error"}), 500
 
 
 @app.post("/api/channel/check-now")
@@ -80,7 +80,18 @@ def status():
 @app.get("/clips")
 def clips_page():
     db = load_db()
-    return render_template("clips.html", videos=db.get("videos", []))
+    videos = db.get("videos", [])
+    for video in videos:
+        for clip in video.get("clips", []):
+            final_path = clip.get("final_path", "")
+            if final_path:
+                try:
+                    clip["download_path"] = os.path.relpath(final_path, config.FINAL_CLIPS_DIR).replace("\\", "/")
+                except Exception:
+                    clip["download_path"] = ""
+            else:
+                clip["download_path"] = ""
+    return render_template("clips.html", videos=videos)
 
 
 @app.get("/api/clips")
@@ -130,14 +141,18 @@ def save_settings():
 
         save_db(db)
         return jsonify({"success": True, "settings": settings})
-    except Exception as exc:
-        return jsonify({"success": False, "message": str(exc)}), 500
+    except Exception:
+        return jsonify({"success": False, "message": "Internal server error"}), 500
 
 
 @app.get("/data/clips_with_captions/<path:clip_file>")
 def serve_final_clip(clip_file):
+    requested = os.path.abspath(os.path.join(config.FINAL_CLIPS_DIR, clip_file))
+    allowed_root = os.path.abspath(config.FINAL_CLIPS_DIR)
+    if os.path.commonpath([requested, allowed_root]) != allowed_root or not os.path.exists(requested):
+        return jsonify({"success": False, "message": "File not found"}), 404
     return send_from_directory(config.FINAL_CLIPS_DIR, clip_file, as_attachment=False)
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(host="127.0.0.1", port=5000, debug=False)

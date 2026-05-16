@@ -97,7 +97,7 @@ def daily_check() -> None:
             _set_status("idle", 0, "No clips extracted")
             return
 
-        _set_status("captioning", 70, "Downloading AI model for first time, please wait...")
+        _set_status("captioning", 70, "Downloading AI model for the first time, please wait...")
         final_output_dir = os.path.join(config.FINAL_CLIPS_DIR, latest_video_id)
         final_paths = process_all_clips(clips, final_output_dir, _default_style(load_db()))
 

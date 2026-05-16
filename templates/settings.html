@@ -22,10 +22,10 @@
 
   <label>Whisper Model</label>
   <select name="whisper_model">
-    <option value="tiny">tiny=fastest</option>
-    <option value="base" selected>base=recommended</option>
-    <option value="small">small=better</option>
-    <option value="medium">medium=best</option>
+    <option value="tiny">Tiny (fastest)</option>
+    <option value="base" selected>Base (recommended)</option>
+    <option value="small">Small (better)</option>
+    <option value="medium">Medium (best)</option>
   </select>
 
   <label>Daily Check Time</label>
@@ -33,4 +33,5 @@
 
   <button type="submit">Save Settings</button>
 </form>
+<div id="settings-message" class="card"></div>
 {% endblock %}

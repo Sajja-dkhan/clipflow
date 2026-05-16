@@ -11,9 +11,9 @@
           <p>Clip #{{ clip.clip_number }}</p>
           <p>{{ clip.duration }}s</p>
           {% if clip.final_path %}
-          {% set final_file = clip.final_path.replace('data/clips_with_captions/', '') %}
-          <a href="/data/clips_with_captions/{{ final_file }}" target="_blank">Preview</a>
-          <a href="/data/clips_with_captions/{{ final_file }}" download>Download</a>
+          {% set clip_url = "/data/clips_with_captions/" ~ clip.download_path %}
+          <a href="{{ clip_url }}" target="_blank">Preview</a>
+          <a href="{{ clip_url }}" download>Download</a>
           <button class="delete-clip-btn" data-path="{{ clip.final_path }}">Delete</button>
           {% else %}
           <span>Caption status: {{ clip.caption_status }}</span>
